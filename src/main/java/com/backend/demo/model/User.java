@@ -1,5 +1,10 @@
 package com.backend.demo.model;
 
+
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class User {
     private int id;
     private String name;
@@ -7,6 +12,7 @@ public class User {
     public User(){
 
     }
+
     public int getId() {
         return id;
     }
