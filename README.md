@@ -1,23 +1,27 @@
-# Spring Boot Backend - Day 1
+# Java Spring Boot Backend Project
 
-## Description
-This is a basic Spring Boot backend project created as part of a 30-day backend learning plan.
+## Overview
+This project is part of my 30-day Java Backend (Spring Boot) learning plan.
+
+## Features Implemented (Till Day 5)
+- User CRUD REST APIs
+- In-memory data storage
+- Service layer architecture
+- Controller layer with REST endpoints
+- Proper HTTP status codes using ResponseEntity
+- Custom exception handling
+- Global exception handler using @RestControllerAdvice
+- Tested APIs using Postman
+
+## Endpoints
+- POST /users → Create users
+- GET /users → Get all users
+- GET /users/{id} → Get user by ID
+- PUT /users/{id} → Update user
+- DELETE /users/{id} → Delete user
 
 ## Tech Stack
-- Java 17
+- Java
 - Spring Boot
 - Maven
-
-## Features
-- Spring Boot application setup
-- First REST API endpoint
-
-## API Endpoint
-- GET /hello  
-  Response: Backend is working
-
-## How to Run
-1. Open project in IntelliJ IDEA
-2. Run DemoApplication.java
-3. Open browser:
-   http://localhost:8080/hello
+- Postman
