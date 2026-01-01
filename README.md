@@ -1,62 +1,99 @@
-# Java Spring Boot Backend – Day 6 Progress 🚀
+# Java Spring Boot Backend – User Management API 🚀
 
-## 📁 Project Structure
-dto/ ├─ UserRequestDTO └─ UserResponseDTO
-exception/ ├─ GlobalExceptionHandler └─ UserNotFoundException
-model/ └─ User
+This project is part of my **30-Day Java Spring Boot Backend Learning Plan**.  
+It demonstrates how to build clean, validated, and production-style REST APIs using Spring Boot.
+
+---
+
+## 📌 Features Implemented (Up to Day 7)
+
+- Bulk User Creation API
+- DTO-based Request & Response handling
+- Input validation using Jakarta Validation
+- Validation for List of DTOs
+- Global Exception Handling
+- Proper HTTP Status Codes
+- Clean Controller–Service Architecture
+- Dependency Injection
+- Tested using Postman
+
+---
+
+## 🏗 Project Architecture
+controller/ └── UserController.java
+service/ ├── UserService.java └── UserServiceImpl.java
+dto/ ├── UserRequestDTO.java └── UserResponseDTO.java
+exception/ └── GlobalExceptionHandler.java
+model/ └── User.java
 Copy code
 
 ---
 
-## 🔹 Create Users (Bulk API)
+## 🔹 API: Create Users (Bulk)
 
-### 📌 Endpoint
+### Endpoint
 POST /users
 Copy code
 
-### 📥 Request Body
+### Request Body
 ```json
 [
-  { "name": "Divya", "email": "divya@gmail.com" },
-  { "name": "Pavan", "email": "pavan@gmail.com" }
+  {
+    "name": "Divya",
+    "email": "divya@gmail.com"
+  },
+  {
+    "name": "Pavan",
+    "email": "pavan@gmail.com"
+  }
 ]
-✅ Success Response (201 Created)
+Success Response (201 Created)
 Copy code
 Json
 [
-  { "id": 1, "name": "Divya", "email": "divya@gmail.com" },
-  { "id": 2, "name": "Pavan", "email": "pavan@gmail.com" }
+  {
+    "id": 1,
+    "name": "Divya",
+    "email": "divya@gmail.com"
+  },
+  {
+    "id": 2,
+    "name": "Pavan",
+    "email": "pavan@gmail.com"
+  }
 ]
 ❌ Validation Error Example
-Request
+Invalid Request
 Copy code
 Json
 [
-  { "name": "", "email": "test@gmail.com" }
+  {
+    "name": "",
+    "email": "wrong-email"
+  }
 ]
 Response (400 Bad Request)
 Copy code
 Json
 {
-  "status": 400,
-  "error": "Bad Request",
-  "path": "/users"
+  "errors": [
+    "Name cannot be empty",
+    "Invalid email format"
+  ]
 }
-🧠 Concepts Learned
-DTO Pattern (Request & Response)
-@Valid & Jakarta Validation
-Global Exception Handling using @RestControllerAdvice
-Service Layer Abstraction
+🧠 Concepts Covered
+REST API Design
+DTO Pattern
+Validation with @Valid and @Validated
+Global Exception Handling
+Dependency Injection
 HTTP Status Codes with ResponseEntity
-RESTful API Design
+Backend debugging & testing
 🛠 Tech Stack
 Java 17
 Spring Boot
 Maven
 Postman
-✅ Status
-Day 6 completed as part of the 30-Day Java Spring Boot Backend Plan
-🔜 Next Steps
-Improve validation error messages
-Implement PUT & DELETE APIs
-Integrate database using Spring Data JPA
+📅 Status
+✅ Completed up to Day 7 of the 30-Day Backend Plan
+➡ Next: Database integration using Spring Data JPA (Day 8)
