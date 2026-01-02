@@ -1,99 +1,108 @@
-# Java Spring Boot Backend – User Management API 🚀
+# Spring Boot User Management API
 
-This project is part of my **30-Day Java Spring Boot Backend Learning Plan**.  
-It demonstrates how to build clean, validated, and production-style REST APIs using Spring Boot.
-
----
-
-## 📌 Features Implemented (Up to Day 7)
-
-- Bulk User Creation API
-- DTO-based Request & Response handling
-- Input validation using Jakarta Validation
-- Validation for List of DTOs
-- Global Exception Handling
-- Proper HTTP Status Codes
-- Clean Controller–Service Architecture
-- Dependency Injection
-- Tested using Postman
+A RESTful backend application built using **Spring Boot**, **Spring Data JPA**, and **MySQL** that demonstrates clean layered architecture, database integration, and proper exception handling.
 
 ---
 
-## 🏗 Project Architecture
-controller/ └── UserController.java
-service/ ├── UserService.java └── UserServiceImpl.java
-dto/ ├── UserRequestDTO.java └── UserResponseDTO.java
-exception/ └── GlobalExceptionHandler.java
-model/ └── User.java
-Copy code
+## 🚀 Features
+
+- CRUD operations for User entity
+- MySQL database integration
+- Spring Data JPA (Hibernate under the hood)
+- Clean architecture (Controller → Service → Repository)
+- Global exception handling
+- REST API tested using Postman
 
 ---
 
-## 🔹 API: Create Users (Bulk)
+## 🛠 Tech Stack
 
-### Endpoint
+- Java
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+- MySQL
+- Maven
+- Postman
+
+---
+
+## 📂 Project Structure
+src/main/java/com/backend/demo │ ├── controller      # REST Controllers ├── service         # Business Logic ├── repository      # JPA Repositories ├── model           # JPA Entities ├── exception       # Custom & Global Exceptions └── DemoApplication # Main class
+
+
+---
+
+## 🧩 Entity
+
+### User Entity
+Represents the `users` table in the database.
+
+Fields:
+- `id` (Primary Key, Auto-generated)
+- `name`
+- `email`
+
+---
+
+## 🔄 API Endpoints
+
+### Create Users
 POST /users
-Copy code
 
-### Request Body
-```json
-[
-  {
-    "name": "Divya",
-    "email": "divya@gmail.com"
-  },
-  {
-    "name": "Pavan",
-    "email": "pavan@gmail.com"
-  }
-]
-Success Response (201 Created)
-Copy code
-Json
-[
-  {
-    "id": 1,
-    "name": "Divya",
-    "email": "divya@gmail.com"
-  },
-  {
-    "id": 2,
-    "name": "Pavan",
-    "email": "pavan@gmail.com"
-  }
-]
-❌ Validation Error Example
-Invalid Request
-Copy code
-Json
-[
-  {
-    "name": "",
-    "email": "wrong-email"
-  }
-]
-Response (400 Bad Request)
-Copy code
-Json
-{
-  "errors": [
-    "Name cannot be empty",
-    "Invalid email format"
-  ]
-}
-🧠 Concepts Covered
-REST API Design
-DTO Pattern
-Validation with @Valid and @Validated
-Global Exception Handling
-Dependency Injection
-HTTP Status Codes with ResponseEntity
-Backend debugging & testing
-🛠 Tech Stack
-Java 17
-Spring Boot
-Maven
-Postman
-📅 Status
-✅ Completed up to Day 7 of the 30-Day Backend Plan
-➡ Next: Database integration using Spring Data JPA (Day 8)
+
+### Get All Users
+GET /users
+
+
+### Get User by ID
+GET /users/{id}
+
+### Update User
+PUT /users/{id}
+
+
+### Delete User
+DELETE /users/{id}
+
+
+---
+
+## ⚠️ Exception Handling
+
+- Returns `404 NOT FOUND` when a user does not exist
+- Centralized error handling using `@RestControllerAdvice`
+- Clean error messages instead of generic 500 errors
+
+---
+
+## 🗄 Database Configuration
+
+Configured using `application.properties`:
+
+- MySQL database
+- Hibernate auto DDL
+- SQL logging enabled
+
+---
+
+## ✅ Testing
+
+All APIs tested using **Postman**:
+- Successful CRUD operations
+- Proper error responses for invalid requests
+
+---
+
+## 📌 What I Learned
+
+- How Spring Boot integrates with databases
+- Using JPA repositories instead of manual logic
+- Importance of layered architecture
+- Proper exception handling in REST APIs
+
+---
+
+## 👨‍💻 Author
+
+Built as part of a **30-Day Java Backend Learning Plan**
