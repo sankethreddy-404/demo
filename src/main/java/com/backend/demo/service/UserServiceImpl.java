@@ -2,65 +2,41 @@ package com.backend.demo.service;
 
 import com.backend.demo.exception.UserNotFoundException;
 import com.backend.demo.model.User;
+import com.backend.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 
 public class UserServiceImpl implements UserService{
-
-    private List<User> users=new ArrayList<>();
-    private int nextid=1;
-    public List<User> createUsers(List<User> newusers){
-        for(User user:newusers){
-            user.setId(nextid++);
-            users.add(user);
-        }
-        return users;
+    private final UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository){
+        this.userRepository=userRepository;
     }
+    @Override
+    public List<User> createUsers(List<User> newUsers){
+        return userRepository.saveAll(newUsers);
+    }
+    @Override
     public List<User> getAllUsers(){
-        return users;
+        return userRepository.findAll();
     }
+    @Override
     public User getUserById(int id){
-        for(User user:users){
-            if(user.getId()==id){
-                return user;
-            }
-        }
-        throw new UserNotFoundException("User not found with id:" + id);
-
+       return userRepository.findById(id).orElseThrow(()->new UserNotFoundException("user not found with id:"+id));
     }
+    @Override
     public User updateUser(int id,User updateduser){
-        for(User user:users){
-            if(user.getId()==id){
-                user.setName(updateduser.getName());
-                user.setEmail(updateduser.getEmail());
-                return user;
-            }
-        }
-        throw new UserNotFoundException("User not found with id:" + id);
+        User existingUser=userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found with id:" +id));
+        existingUser.setName(updateduser.getName());
+        existingUser.setEmail(updateduser.getEmail());
+        return userRepository.save(existingUser);
 
     }
+    @Override
     public void deleteUser(int id){
-        User userToDelete=null;
-
-        for(User user:users){
-            if(user.getId()==id){
-                userToDelete=user;
-                break;
-            }
-        }
-        if(userToDelete!=null){
-            users.remove(userToDelete);
-            return;
-        }
-        throw new UserNotFoundException("User not found with id:"+id);
+        User user=userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found with id:"+id));
+        userRepository.delete(user);
     }
-
-
-
-
 }

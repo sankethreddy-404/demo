@@ -1,11 +1,13 @@
 package com.backend.demo.model;
 
 
+import jakarta.persistence.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@Entity
+@Table(name="users")
 public class User {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private String name;
     private String email;
