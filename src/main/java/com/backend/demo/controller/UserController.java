@@ -29,8 +29,10 @@ public class UserController {
 
     // READ ALL
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue="5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,@RequestParam(defaultValue = "asc") String sortDir) {
+        return ResponseEntity.ok(userService.getAllUsers(page,size,sortBy,sortDir));
     }
 
     // READ BY ID

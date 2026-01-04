@@ -5,6 +5,10 @@ import com.backend.demo.dto.UserResponseDTO;
 import com.backend.demo.exception.UserNotFoundException;
 import com.backend.demo.model.User;
 import com.backend.demo.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,17 +32,15 @@ public class UserServiceImpl implements UserService{
         return mapToResponseDTO(savedUser);
     }
     @Override
-    public List<UserResponseDTO> getAllUsers() {
-
-        List<User> users=userRepository.findAll();
+    public List<UserResponseDTO> getAllUsers(int page,int size,String sortBy,String sortDir) {
+        Sort sort=sortDir.equalsIgnoreCase("asc")? Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable= PageRequest.of(page,size,sort);
+        Page<User> usersPage=userRepository.findAll(pageable);
         List<UserResponseDTO> response=new ArrayList<>();
-        for(User user:users){
-            UserResponseDTO dto=new UserResponseDTO();
-            dto.setId(user.getId());
-            dto.setName(user.getName());
-            dto.setEmail(user.getEmail());
-            response.add(dto);
+        for(User user: usersPage.getContent()){
+            response.add(mapToResponseDTO(user));
         }
+
         return response;
     }
     @Override

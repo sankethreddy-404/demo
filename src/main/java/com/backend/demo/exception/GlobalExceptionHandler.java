@@ -1,5 +1,6 @@
 package com.backend.demo.exception;
 
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public class GlobalExceptionHandler {
 
         List<String> errors = ex.getConstraintViolations()
                 .stream()
-                .map(violation -> violation.getMessage())
+                .map(ConstraintViolation::getMessage)
                 .toList();
 
         Map<String, List<String>> response = new HashMap<>();
