@@ -1,4 +1,5 @@
 package com.backend.demo.controller;
+import com.backend.demo.dto.PageResponseDTO;
 import com.backend.demo.dto.UserRequestDTO;
 import com.backend.demo.dto.UserResponseDTO;
 import com.backend.demo.model.User;
@@ -29,9 +30,9 @@ public class UserController {
 
     // READ ALL
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestParam(defaultValue = "0") int page,
-                                                             @RequestParam(defaultValue="5") int size,
-            @RequestParam(defaultValue = "id") String sortBy,@RequestParam(defaultValue = "asc") String sortDir) {
+    public ResponseEntity<PageResponseDTO<UserResponseDTO>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                                                        @RequestParam(defaultValue="5") int size,
+                                                                        @RequestParam(defaultValue = "id") String sortBy, @RequestParam(defaultValue = "asc") String sortDir) {
         return ResponseEntity.ok(userService.getAllUsers(page,size,sortBy,sortDir));
     }
 

@@ -1,5 +1,6 @@
 package com.backend.demo.service;
 
+import com.backend.demo.dto.PageResponseDTO;
 import com.backend.demo.dto.UserRequestDTO;
 import com.backend.demo.dto.UserResponseDTO;
 import com.backend.demo.exception.UserNotFoundException;
@@ -32,15 +33,21 @@ public class UserServiceImpl implements UserService{
         return mapToResponseDTO(savedUser);
     }
     @Override
-    public List<UserResponseDTO> getAllUsers(int page,int size,String sortBy,String sortDir) {
+    public PageResponseDTO<UserResponseDTO> getAllUsers(int page, int size, String sortBy, String sortDir) {
         Sort sort=sortDir.equalsIgnoreCase("asc")? Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(page,size,sort);
         Page<User> usersPage=userRepository.findAll(pageable);
-        List<UserResponseDTO> response=new ArrayList<>();
+        List<UserResponseDTO> responseList=new ArrayList<>();
         for(User user: usersPage.getContent()){
-            response.add(mapToResponseDTO(user));
+            responseList.add(mapToResponseDTO(user));
         }
-
+        PageResponseDTO<UserResponseDTO> response= new PageResponseDTO<>();
+        response.setContent(responseList);
+        response.setPageNumber(usersPage.getNumber());
+        response.setPageSize(usersPage.getSize());
+        response.setTotalElements(usersPage.getTotalElements());
+        response.setTotalPages(usersPage.getTotalPages());
+        response.setLast(usersPage.isLast());
         return response;
     }
     @Override
