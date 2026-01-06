@@ -33,10 +33,17 @@ public class UserServiceImpl implements UserService{
         return mapToResponseDTO(savedUser);
     }
     @Override
-    public PageResponseDTO<UserResponseDTO> getAllUsers(int page, int size, String sortBy, String sortDir) {
+    public PageResponseDTO<UserResponseDTO> getAllUsers(int page, int size, String sortBy, String sortDir,String keyword) {
         Sort sort=sortDir.equalsIgnoreCase("asc")? Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(page,size,sort);
-        Page<User> usersPage=userRepository.findAll(pageable);
+        Page<User> usersPage;
+
+        if(keyword!=null && !keyword.trim().isEmpty()){
+            usersPage=userRepository.findByNameContainingOrEmailContaining(keyword.trim(),keyword.trim(),pageable);
+        }
+        else {
+            usersPage = userRepository.findAll(pageable);
+        }
         List<UserResponseDTO> responseList=new ArrayList<>();
         for(User user: usersPage.getContent()){
             responseList.add(mapToResponseDTO(user));
