@@ -4,7 +4,7 @@ import com.backend.demo.dto.PageResponseDTO;
 import com.backend.demo.dto.UserRequestDTO;
 import com.backend.demo.dto.UserResponseDTO;
 import com.backend.demo.exception.UserNotFoundException;
-import com.backend.demo.model.User;
+import com.backend.demo.entity.User;
 import com.backend.demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +31,22 @@ public class UserServiceImpl implements UserService{
         User savedUser=userRepository.save(user);
 
         return mapToResponseDTO(savedUser);
+    }
+    @Override
+    public List<UserResponseDTO> createUsersBulk(List<UserRequestDTO> users){
+        List<User> entities=new ArrayList<>();
+        for(UserRequestDTO dto:users){
+            User user=new User();
+            user.setName(dto.getName());
+            user.setEmail(dto.getEmail());
+            entities.add(user);
+        }
+        List<User> savedUsers=userRepository.saveAll(entities);
+        List<UserResponseDTO> response=new ArrayList<>();
+        for(User user:savedUsers){
+            response.add(mapToResponseDTO(user));
+        }
+        return response;
     }
     @Override
     public PageResponseDTO<UserResponseDTO> getAllUsers(int page, int size, String sortBy, String sortDir,String keyword) {
