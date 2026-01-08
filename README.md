@@ -1,11 +1,29 @@
-# 🚀 Java Spring Boot Backend – 30 Day Learning Project
+# User Management REST API
 
-This project is part of my **30-day Java Backend Development plan**.  
-The goal is to build a **clean, production-ready REST API** using Spring Boot by following industry best practices step by step.
+A Spring Boot REST API for managing users with a clean layered architecture.  
+This project demonstrates real-world backend practices such as DTO-based design,
+validation, global exception handling, pagination, search, bulk operations, and
+standardized API responses.
+
+---
+
+## 🚀 Features
+
+- Create user (single)
+- Create users in bulk
+- Get user by ID
+- Get all users with pagination
+- Search users by name or email
+- Update user details
+- Delete user
+- Input validation using annotations
+- Global exception handling
+- Consistent API response structure
 
 ---
 
 ## 🛠 Tech Stack
+
 - Java 17
 - Spring Boot
 - Spring Data JPA
@@ -13,111 +31,77 @@ The goal is to build a **clean, production-ready REST API** using Spring Boot by
 - MySQL
 - Maven
 - Postman
-- Git & GitHub
 
 ---
 
-## 📁 Project Structure (MVC)
-- **Controller** → Handles HTTP requests
-- **Service** → Business logic
-- **Repository** → Database interaction (JPA)
-- **Model (Entity)** → Database tables
-- **DTOs** → Request & Response objects
-- **Exception** → Global exception handling
+## 🧱 Project Architecture
+
+The application follows a clean layered architecture:
+
+- **Controller** – Handles HTTP requests and responses
+- **Service** – Contains business logic
+- **Repository** – Handles database interactions
+- **DTOs** – Used for request and response payloads
+- **Entity** – Represents database tables
+- **Global Exception Handler** – Handles errors centrally
+
+Flow:
+Client → Controller → Service → Repository → Database ← Controller ← Service ← Repository
+
 
 ---
 
-## ✅ Features Implemented (Day 1 – Day 11)
+## 📦 API Endpoints
 
-### 1️⃣ REST API Basics
-- RESTful architecture
-- Stateless communication
-- Proper HTTP methods:
-    - GET
-    - POST
-    - PUT
-    - DELETE
-- Proper HTTP status codes using `ResponseEntity`
-
----
-
-### 2️⃣ Database Integration
-- JPA Entity mapping using:
-    - `@Entity`
-    - `@Id`
-    - `@GeneratedValue`
-- Hibernate handles database operations (no manual SQL)
-- MySQL integration
+| Method | Endpoint    | Description                       |
+|--------|-------------|-----------------------------------|
+| POST   | /users      | Create a single user              |
+| POST   | /users/bulk | Create users in bulk              |
+| GET    | /users      | Get all users (pagination/search) |
+| GET    | /users/{id} | Get user by ID                    |
+| PUT    | /users/{id} | Update user                       |
+| DELETE | /users/{id} | Delete user                       |
 
 ---
 
-### 3️⃣ DTO Pattern
-- `UserRequestDTO` → Handles incoming client data
-- `UserResponseDTO` → Controls outgoing response data
-- Prevents exposing entity directly to client
-- Improves security and flexibility
+## 📄 Standard API Response Structure
+
+All APIs return a consistent response format:
+
+```json
+{
+  "timestamp": "2026-01-08T10:30:00",
+  "status": 200,
+  "message": "Success message",
+  "data": {}
+}
+
+✅ Validation & Error Handling
+
+Request data is validated using annotations like @NotBlank, @Email, and @Valid
+Validation and runtime errors are handled globally using @RestControllerAdvice
+Proper HTTP status codes are returned (400, 404, 200, 201)
+
+📚 What I Learned
+
+Designing clean REST APIs with Spring Boot
+Controller–Service–Repository separation
+DTO-based API design
+Pagination, sorting, and search with Spring Data JPA
+Bulk API design
+Global exception handling
+Standardizing API responses
+Testing APIs using Postman
+
+▶️ How to Run the Project
+
+Clone the repository
+Configure MySQL database in application.properties
+Run the application
+Test APIs using Postman
+
+👤 Author
+Built as part of a 30-day Java Backend (Spring Boot) learning journey.
+
 
 ---
-
-### 4️⃣ Validation
-- Annotations used:
-    - `@NotBlank`
-    - `@Email`
-    - `@Valid`
-- Centralized validation handling
-- Clean error responses
-
----
-
-### 5️⃣ Exception Handling
-- Custom exceptions (e.g. UserNotFoundException)
-- Global exception handling using:
-    - `@RestControllerAdvice`
-
----
-
-### 6️⃣ Pagination & Sorting (Day 10)
-- Pagination using:
-    - `page`
-    - `size`
-- Sorting using:
-    - `sortBy`
-    - `sortDir (asc / desc)`
-- Pagination + Sorting together
-- Clean API design using `@RequestParam`
-
----
-
-### 7️⃣ Pagination Response DTO (Day 11)
-- Generic `PageResponseDTO<T>`
-- Includes:
-    - Content list
-    - Page number
-    - Page size
-    - Total elements
-    - Total pages
-    - Is last page
-- Reusable for any entity
-
----
-
-## 🧪 API Testing
-- Tested all APIs using **Postman**
-- Verified:
-    - CRUD operations
-    - Pagination
-    - Sorting
-    - Validation errors
-    - Exception responses
-
----
-
-## 📌 Current Status
-✔ Completed up to **Day 11**  
-🔜 Day 12 onwards in progress
-
----
-
-## 🙌 Author
-**Sanketh Reddy**  
-Learning Java Backend Development step by step 🚀
