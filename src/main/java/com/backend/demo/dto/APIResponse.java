@@ -3,12 +3,13 @@ package com.backend.demo.dto;
 import java.time.LocalDateTime;
 
 public class APIResponse <T>{
+    private LocalDateTime timeStamp;
     private int status;
     private String message;
-    private LocalDateTime timeStamp;
+
     private T data;
 
-    public APIResponse(LocalDateTime timeStamp,int status, String message, T data) {
+    public APIResponse(LocalDateTime timeStamp,int status,String message, T data) {
         this.status = status;
         this.message = message;
         this.timeStamp = timeStamp;

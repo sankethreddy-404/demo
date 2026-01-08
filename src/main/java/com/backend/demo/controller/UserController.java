@@ -28,15 +28,15 @@ public class UserController {
     @PostMapping
     public ResponseEntity<APIResponse<UserResponseDTO>> createUser(@Valid @RequestBody UserRequestDTO dto) {
         UserResponseDTO response=userService.createUser(dto);
-        APIResponse<UserResponseDTO> apiResponse=new APIResponse<>(LocalDateTime.now(), HttpStatus.CREATED.value(),"User created successfully",response);
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        APIResponse<UserResponseDTO> apiResponse=new APIResponse<>(LocalDateTime.now(), HttpStatus.CREATED.value(),"User added successfully",response);
+        return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
     @PostMapping("/bulk")
     public ResponseEntity<APIResponse<List<UserResponseDTO>>> createUsersBulk(@Valid @RequestBody List<UserRequestDTO> dto){
         List<UserResponseDTO> users=userService.createUsersBulk(dto);
-        APIResponse<List<UserResponseDTO>> response=new APIResponse<>(LocalDateTime.now(),HttpStatus.CREATED.value(),"created bulk users successfully",users);
+        APIResponse<List<UserResponseDTO>> response=new APIResponse<>(LocalDateTime.now(),HttpStatus.CREATED.value(),"Bulk users added successfully",users);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
     // READ ALL
@@ -47,28 +47,34 @@ public class UserController {
                                                                         @RequestParam(defaultValue = "asc") String sortDir,
                                                                         @RequestParam (required = false) String keyword) {
         PageResponseDTO<UserResponseDTO> response=userService.getAllUsers(page,size,sortBy,sortDir,keyword);
-        APIResponse<PageResponseDTO<UserResponseDTO>> apiResponse=new APIResponse<>(LocalDateTime.now(),HttpStatus.CREATED.value(),"users fetch successfully",response);
+        APIResponse<PageResponseDTO<UserResponseDTO>> apiResponse=new APIResponse<>(LocalDateTime.now(),HttpStatus.OK.value(),"All users fetched successfully",response);
         return ResponseEntity.ok(apiResponse);
     }
 
     // READ BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable int id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<APIResponse<UserResponseDTO>> getUserById(@PathVariable int id) {
+        UserResponseDTO responseList= userService.getUserById(id);
+        APIResponse<UserResponseDTO> response=new APIResponse<>(LocalDateTime.now(),HttpStatus.OK.value(),"user by id fetched successfully",responseList);
+
+        return ResponseEntity.ok(response);
     }
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(
+    public ResponseEntity<APIResponse<UserResponseDTO>> updateUser(
             @PathVariable int id,
             @RequestBody UserRequestDTO dto) {
-        return ResponseEntity.ok(userService.updateUser(id, dto));
+        UserResponseDTO responseList=userService.updateUser(id,dto);
+        APIResponse<UserResponseDTO> response=new APIResponse<>(LocalDateTime.now(),HttpStatus.OK.value(),"User updated successfully",responseList);
+        return ResponseEntity.ok(response);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable int id) {
+    public ResponseEntity<APIResponse<String>> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully");
+        APIResponse<String> apiResponse=new APIResponse<>(LocalDateTime.now(),HttpStatus.OK.value(),"User Deleted Successfully","User with id"+id+"has been deleted");
+        return ResponseEntity.ok(apiResponse);
     }
 }
