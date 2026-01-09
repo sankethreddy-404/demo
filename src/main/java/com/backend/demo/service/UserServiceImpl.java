@@ -25,21 +25,15 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public UserResponseDTO createUser(UserRequestDTO dto){
-        User user=new User();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
+        User user=mapToEntity(dto);
         User savedUser=userRepository.save(user);
-
         return mapToResponseDTO(savedUser);
     }
     @Override
     public List<UserResponseDTO> createUsersBulk(List<UserRequestDTO> users){
         List<User> entities=new ArrayList<>();
         for(UserRequestDTO dto:users){
-            User user=new User();
-            user.setName(dto.getName());
-            user.setEmail(dto.getEmail());
-            entities.add(user);
+            entities.add(mapToEntity(dto));
         }
         List<User> savedUsers=userRepository.saveAll(entities);
         List<UserResponseDTO> response=new ArrayList<>();
@@ -75,12 +69,12 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public UserResponseDTO getUserById(int id){
-        User user=userRepository.findById(id).orElseThrow(()->new UserNotFoundException("user not found with id:"+id));
+        User user=getUserOrThrow(id);
         return mapToResponseDTO(user);
     }
     @Override
     public UserResponseDTO updateUser(int id,UserRequestDTO dto){
-        User existingUser=userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found with id:" +id));
+        User existingUser=getUserOrThrow(id);
         existingUser.setName(dto.getName());
         existingUser.setEmail(dto.getEmail());
         User updateUser=userRepository.save(existingUser);
@@ -89,8 +83,17 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public void  deleteUser(int id){
-        User user=userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found with id:"+id));
+        User user=getUserOrThrow(id);
         userRepository.delete(user);
+    }
+    private User getUserOrThrow(int id){
+        return userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found with id: "+id));
+    }
+    private User mapToEntity(UserRequestDTO dto){
+        User user=new User();
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        return user;
     }
     private UserResponseDTO mapToResponseDTO(User user){
         UserResponseDTO dto=new UserResponseDTO();

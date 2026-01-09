@@ -24,22 +24,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    // CREATE
     @PostMapping
     public ResponseEntity<APIResponse<UserResponseDTO>> createUser(@Valid @RequestBody UserRequestDTO dto) {
         UserResponseDTO response=userService.createUser(dto);
         APIResponse<UserResponseDTO> apiResponse=new APIResponse<>(LocalDateTime.now(), HttpStatus.CREATED.value(),"User added successfully",response);
         return new ResponseEntity<>(apiResponse,HttpStatus.CREATED);
     }
+
     @PostMapping("/bulk")
-    public ResponseEntity<APIResponse<List<UserResponseDTO>>> createUsersBulk(@Valid @RequestBody List<UserRequestDTO> dto){
+    public ResponseEntity<APIResponse<List<UserResponseDTO>>> createUsersBulk(@Valid @RequestBody List<@Valid UserRequestDTO> dto){
         List<UserResponseDTO> users=userService.createUsersBulk(dto);
         APIResponse<List<UserResponseDTO>> response=new APIResponse<>(LocalDateTime.now(),HttpStatus.CREATED.value(),"Bulk users added successfully",users);
 
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
-    // READ ALL
     @GetMapping
     public ResponseEntity<APIResponse<PageResponseDTO<UserResponseDTO>>> getAllUsers(@RequestParam(defaultValue = "0") int page,
                                                                         @RequestParam(defaultValue="5") int size,
@@ -51,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // READ BY ID
+
     @GetMapping("/{id}")
     public ResponseEntity<APIResponse<UserResponseDTO>> getUserById(@PathVariable int id) {
         UserResponseDTO responseList= userService.getUserById(id);
@@ -60,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // UPDATE
+
     @PutMapping("/{id}")
     public ResponseEntity<APIResponse<UserResponseDTO>> updateUser(
             @PathVariable int id,
@@ -70,11 +69,11 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    // DELETE
+
     @DeleteMapping("/{id}")
     public ResponseEntity<APIResponse<String>> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
-        APIResponse<String> apiResponse=new APIResponse<>(LocalDateTime.now(),HttpStatus.OK.value(),"User Deleted Successfully","User with id"+id+"has been deleted");
+        APIResponse<String> apiResponse=new APIResponse<>(LocalDateTime.now(),HttpStatus.OK.value(),"User Deleted Successfully",null);
         return ResponseEntity.ok(apiResponse);
     }
 }
