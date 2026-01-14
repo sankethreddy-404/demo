@@ -5,6 +5,7 @@ import com.backend.demo.dto.UserRequestDTO;
 import com.backend.demo.dto.UserResponseDTO;
 import com.backend.demo.exception.UserNotFoundException;
 import com.backend.demo.entity.User;
+import com.backend.demo.mapper.UserMapper;
 import com.backend.demo.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,20 +26,20 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     public UserResponseDTO createUser(UserRequestDTO dto){
-        User user=mapToEntity(dto);
+        User user= UserMapper.toEntity(dto);
         User savedUser=userRepository.save(user);
-        return mapToResponseDTO(savedUser);
+        return UserMapper.toResponseDTO(savedUser);
     }
     @Override
     public List<UserResponseDTO> createUsersBulk(List<UserRequestDTO> users){
         List<User> entities=new ArrayList<>();
         for(UserRequestDTO dto:users){
-            entities.add(mapToEntity(dto));
+            entities.add(UserMapper.toEntity(dto));
         }
         List<User> savedUsers=userRepository.saveAll(entities);
         List<UserResponseDTO> response=new ArrayList<>();
         for(User user:savedUsers){
-            response.add(mapToResponseDTO(user));
+            response.add(UserMapper.toResponseDTO(user));
         }
         return response;
     }
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService{
         }
         List<UserResponseDTO> responseList=new ArrayList<>();
         for(User user: usersPage.getContent()){
-            responseList.add(mapToResponseDTO(user));
+            responseList.add(UserMapper.toResponseDTO(user));
         }
         PageResponseDTO<UserResponseDTO> response= new PageResponseDTO<>();
         response.setContent(responseList);
@@ -70,15 +71,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponseDTO getUserById(int id){
         User user=getUserOrThrow(id);
-        return mapToResponseDTO(user);
+        return UserMapper.toResponseDTO(user);
     }
     @Override
     public UserResponseDTO updateUser(int id,UserRequestDTO dto){
         User existingUser=getUserOrThrow(id);
-        existingUser.setName(dto.getName());
-        existingUser.setEmail(dto.getEmail());
+        UserMapper.updateEntity(existingUser,dto);
         User updateUser=userRepository.save(existingUser);
-        return mapToResponseDTO(updateUser);
+        return UserMapper.toResponseDTO(updateUser);
 
     }
     @Override
@@ -89,17 +89,6 @@ public class UserServiceImpl implements UserService{
     private User getUserOrThrow(int id){
         return userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found with id: "+id));
     }
-    private User mapToEntity(UserRequestDTO dto){
-        User user=new User();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        return user;
-    }
-    private UserResponseDTO mapToResponseDTO(User user){
-        UserResponseDTO dto=new UserResponseDTO();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        return dto;
-    }
+
+
 }

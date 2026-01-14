@@ -1,7 +1,10 @@
 package com.backend.demo.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -11,6 +14,18 @@ public class User {
     private int id;
     private String name;
     private String email;
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    @OneToMany(mappedBy="user",cascade=CascadeType.ALL,orphanRemoval = true)
+    @JsonManagedReference
+    private List<Order> orders;
     public User(){
 
     }
