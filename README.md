@@ -1,107 +1,145 @@
-# User Management REST API
+# 🚀 Java Spring Boot Backend Project
 
-A Spring Boot REST API for managing users with a clean layered architecture.  
-This project demonstrates real-world backend practices such as DTO-based design,
-validation, global exception handling, pagination, search, bulk operations, and
-standardized API responses.
+This project is part of my **30-Day Java Spring Boot Backend Learning Journey**, where I am building a **real-world REST API** step by step using industry best practices.
 
----
-
-## 🚀 Features
-
-- Create user (single)
-- Create users in bulk
-- Get user by ID
-- Get all users with pagination
-- Search users by name or email
-- Update user details
-- Delete user
-- Input validation using annotations
-- Global exception handling
-- Consistent API response structure
+The focus is on **clean architecture**, **scalable API design**, and **hands-on debugging**, not just tutorials.
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Tech Stack
 
 - Java 17
 - Spring Boot
 - Spring Data JPA
 - Hibernate
 - MySQL
-- Maven
 - Postman
+- Maven
 
 ---
 
-## 🧱 Project Architecture
+## 🧩 Project Architecture
 
-The application follows a clean layered architecture:
+The application follows a clean **layered architecture**:
+Controller → DTO → Validation → Service → Mapper → Repository → Database
 
-- **Controller** – Handles HTTP requests and responses
-- **Service** – Contains business logic
-- **Repository** – Handles database interactions
-- **DTOs** – Used for request and response payloads
-- **Entity** – Represents database tables
-- **Global Exception Handler** – Handles errors centrally
 
-Flow:
-Client → Controller → Service → Repository → Database ← Controller ← Service ← Repository
+### Layers Explained
+
+- **Controller**  
+  Handles HTTP requests and responses
+
+- **DTOs (Request & Response)**  
+  Acts as API contract and hides internal entity structure
+
+- **Validation**  
+  Input validation using annotations like `@Valid`
+
+- **Service**  
+  Contains business logic and decision making
+
+- **Mapper**  
+  Converts Entity ↔ DTO (separation of concerns)
+
+- **Repository**  
+  Handles database interaction using Spring Data JPA
+
+- **Global Exception Handler**  
+  Centralized error handling using `@ControllerAdvice`
+
+---
+
+## ✨ Features Implemented (Up to Day 19)
+
+### ✅ User Management
+- Create, read, update, delete users
+- Input validation using `@Valid`
+- Proper HTTP status codes using `ResponseEntity`
+
+### ✅ Order Management
+- Create orders for a user
+- Fetch orders by user
+- User–Order relationship using `@ManyToOne`
+
+### ✅ Pagination & Sorting
+- Pagination using `Page` and `Pageable`
+- Sorting using `Sort`
+- Supports:
+    - `page`
+    - `size`
+    - `sortBy`
+    - `sortDir`
+- Pagination metadata included:
+    - `totalElements`
+    - `totalPages`
+    - `pageNumber`
+    - `pageSize`
+    - `lastPage`
+
+### ✅ API Response Standardization
+- Custom API response wrapper
+- Consistent success and error responses
+- Fields:
+    - status
+    - message
+    - data
+
+### ✅ Exception Handling
+- Centralized exception handling using `@ControllerAdvice`
+- Custom exceptions for:
+    - User not found
+    - Validation errors
+
+### ✅ DTO & Mapper Layer
+- Entities are **never exposed** directly to clients
+- Separate Request & Response DTOs
+- Dedicated Mapper classes for conversions
+
+### ✅ Real-World Debugging Experience
+- Fixed pagination & sorting runtime issues
+- Learned Spring Data JPA method naming rules
+- Debugged and resolved `500 Internal Server Error`
+- Understood Lazy vs Eager fetching behavior
+
+---
+
+## 🔍 Sample API Endpoints
+
+### Create Order
+POST /orders/users/{userId}
+
+
+### Get Orders with Pagination & Sorting
+GET /orders/users/{userId}?page=0&size=5&sortBy=id&sortDir=asc
 
 
 ---
 
-## 📦 API Endpoints
+## 🎯 Learning Outcomes
 
-| Method | Endpoint    | Description                       |
-|--------|-------------|-----------------------------------|
-| POST   | /users      | Create a single user              |
-| POST   | /users/bulk | Create users in bulk              |
-| GET    | /users      | Get all users (pagination/search) |
-| GET    | /users/{id} | Get user by ID                    |
-| PUT    | /users/{id} | Update user                       |
-| DELETE | /users/{id} | Delete user                       |
+Through this project, I learned:
+
+- Why entities should not be exposed directly to clients
+- How to design clean service and controller layers
+- How pagination should be handled at the database level
+- How to debug real Spring Boot runtime issues
+- How to write maintainable and scalable backend code
+
+---
+
+## 📌 Progress Status
+
+- ✅ Completed up to **Day 19** of my 30-day backend plan
+- 🔜 Upcoming topics:
+    - Search & filter APIs
+    - Swagger API documentation
+    - Spring Security & JWT
+    - Docker & deployment
 
 ---
 
-## 📄 Standard API Response Structure
+## 🤝 Connect
 
-All APIs return a consistent response format:
+I’m sharing my backend learning journey publicly to stay consistent and accountable.
 
-```json
-{
-  "timestamp": "2026-01-08T10:30:00",
-  "status": 200,
-  "message": "Success message",
-  "data": {}
-}
-
-✅ Validation & Error Handling
-
-Request data is validated using annotations like @NotBlank, @Email, and @Valid
-Validation and runtime errors are handled globally using @RestControllerAdvice
-Proper HTTP status codes are returned (400, 404, 200, 201)
-
-📚 What I Learned
-
-Designing clean REST APIs with Spring Boot
-Controller–Service–Repository separation
-DTO-based API design
-Pagination, sorting, and search with Spring Data JPA
-Bulk API design
-Global exception handling
-Standardizing API responses
-Testing APIs using Postman
-
-▶️ How to Run the Project
-
-Clone the repository
-Configure MySQL database in application.properties
-Run the application
-Test APIs using Postman
-
-👤 Author
-Built as part of a 30-day Java Backend (Spring Boot) learning journey.
-
-
----
+Feel free to check the code, suggest improvements, or connect!
