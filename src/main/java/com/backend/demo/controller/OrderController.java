@@ -25,12 +25,16 @@ public class OrderController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<APIResponse<PageResponseDTO<OrderResponseDTO>>> getOrders(@PathVariable int userId,
+    public ResponseEntity<APIResponse<PageResponseDTO<OrderResponseDTO>>> getAllOrders(@PathVariable int userId,
                                                                                     @RequestParam (defaultValue ="0") int page,
                                                                                     @RequestParam(defaultValue = "5") int size,
                                                                                     @RequestParam(defaultValue="id")String sortBy,
-                                                                                    @RequestParam(defaultValue = "asc") String sortDir){
-        PageResponseDTO<OrderResponseDTO> pageResponse=orderService.getOrdersByUserId(userId,page,size,sortBy,sortDir);
+                                                                                    @RequestParam(defaultValue = "asc") String sortDir,
+                                                                                    @RequestParam(required = false) String keyword,
+                                                                                    @RequestParam(required = false) Integer minPrice,
+                                                                                    @RequestParam(required = false) Integer maxPrice
+                                                                                    ){
+        PageResponseDTO<OrderResponseDTO> pageResponse=orderService.getOrdersByUserId(userId,page,size,sortBy,sortDir,keyword,minPrice,maxPrice);
         APIResponse<PageResponseDTO<OrderResponseDTO>> apiResponse= new APIResponse<>(LocalDateTime.now(),200,"Orders fetched successfully",pageResponse);
         return  ResponseEntity.ok(apiResponse);
     }

@@ -7,5 +7,5 @@ import com.backend.demo.dto.PageResponseDTO;
 
 public interface OrderService {
     public OrderResponseDTO createOrder(int userId, OrderRequestDTO dto);
-    public PageResponseDTO<OrderResponseDTO> getOrdersByUserId(int userId, int page, int size, String sortBy, String sortDir);
+    public PageResponseDTO<OrderResponseDTO> getOrdersByUserId(int userId, int page, int size, String sortBy, String sortDir,String keyword,Integer minPrice,Integer maxPrice);
 }

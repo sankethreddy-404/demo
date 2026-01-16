@@ -35,11 +35,11 @@ public class OrderServiceImpl implements OrderService{
         return orderMapper.toResponseDTO(savedOrder);
     }
     @Override
-    public PageResponseDTO<OrderResponseDTO> getOrdersByUserId(int userId, int page, int size, String sortBy, String sortDir){
+    public PageResponseDTO<OrderResponseDTO> getOrdersByUserId(int userId, int page, int size, String sortBy, String sortDir,String keyword,Integer minPrice,Integer maxPrice){
         validateUserExists(userId);
         Sort sort=sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(page,size,sort);
-        Page<Order> orderPage=orderRepository.findByUser_Id(userId,pageable);
+        Page<Order> orderPage=orderRepository.searchOrdersByUser(userId,keyword,minPrice,maxPrice,pageable);
         List<OrderResponseDTO> orderDTOs=orderPage.getContent().stream().map(orderMapper::toResponseDTO).toList();
         PageResponseDTO<OrderResponseDTO> response = new PageResponseDTO<>();
         response.setContent(orderDTOs);
