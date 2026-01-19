@@ -2,13 +2,15 @@ package com.backend.demo.controller;
 
 import com.backend.demo.dto.*;
 import com.backend.demo.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Tag(name="Orders",description="Order management APIs")
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -23,7 +25,7 @@ public class OrderController {
         APIResponse<OrderResponseDTO> apiResponse=new APIResponse<>(LocalDateTime.now(),201,"Order created successfully",response);
         return  new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
-
+    @Operation(summary="Get orders by user",description="Fetch orders of a user search,price filtering ,pagination and sorting")
     @GetMapping("/users/{userId}")
     public ResponseEntity<APIResponse<PageResponseDTO<OrderResponseDTO>>> getAllOrders(@PathVariable int userId,
                                                                                     @RequestParam (defaultValue ="0") int page,

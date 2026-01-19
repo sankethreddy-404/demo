@@ -4,6 +4,7 @@ import com.backend.demo.dto.PageResponseDTO;
 import com.backend.demo.dto.UserRequestDTO;
 import com.backend.demo.dto.UserResponseDTO;
 import com.backend.demo.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Validated
 @RestController
+@Tag(name="Users",description="User management APIs")
 @RequestMapping("/users")
 public class UserController {
 
