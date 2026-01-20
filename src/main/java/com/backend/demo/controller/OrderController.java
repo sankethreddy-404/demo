@@ -4,6 +4,7 @@ import com.backend.demo.dto.*;
 import com.backend.demo.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class OrderController {
     }
 
     @PostMapping("/users/{userId}")
-    public ResponseEntity<APIResponse<OrderResponseDTO>> createOrder(@PathVariable int userId, @RequestBody OrderRequestDTO dto){
+    public ResponseEntity<APIResponse<OrderResponseDTO>> createOrder(@PathVariable int userId,@Valid @RequestBody OrderRequestDTO dto){
         OrderResponseDTO response= orderService.createOrder(userId,dto);
         APIResponse<OrderResponseDTO> apiResponse=new APIResponse<>(LocalDateTime.now(),201,"Order created successfully",response);
         return  new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
