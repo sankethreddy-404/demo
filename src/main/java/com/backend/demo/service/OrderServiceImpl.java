@@ -9,6 +9,8 @@ import com.backend.demo.exception.UserNotFoundException;
 import com.backend.demo.mapper.OrderMapper;
 import com.backend.demo.repository.OrderRepository;
 import com.backend.demo.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,19 +29,27 @@ public class OrderServiceImpl implements OrderService{
         this.userRepository=userRepository;
         this.orderMapper=orderMapper;
     }
+    private static final Logger log= LoggerFactory.getLogger(OrderServiceImpl.class);
     @Override
     public OrderResponseDTO createOrder(int userId, OrderRequestDTO dto){
-        User user=userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User not found"));
+        log.info("Creating orders for userId={}",userId);
+        User user=userRepository.findById(userId).orElseThrow(()-> {
+            log.warn("User not found while creating order ,userId={}",userId);
+            return new UserNotFoundException("user not found");
+        });
         Order order=orderMapper.toEntity(dto,user);
         Order savedOrder=orderRepository.save(order);
+        log.info("Order created successfully for userId={},orderId={}",userId,savedOrder.getId());
         return orderMapper.toResponseDTO(savedOrder);
     }
     @Override
     public PageResponseDTO<OrderResponseDTO> getOrdersByUserId(int userId, int page, int size, String sortBy, String sortDir,String keyword,Integer minPrice,Integer maxPrice){
+        log.debug("Fetching orders for userId={},page={},size={}",userId,page,size);
         validateUserExists(userId);
         Sort sort=sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
         Pageable pageable= PageRequest.of(page,size,sort);
         Page<Order> orderPage=orderRepository.searchOrdersByUser(userId,keyword,minPrice,maxPrice,pageable);
+        log.debug("Orders fetched : totalElements={},totalPages={}",orderPage.getTotalElements(),orderPage.getTotalPages());
         List<OrderResponseDTO> orderDTOs=orderPage.getContent().stream().map(orderMapper::toResponseDTO).toList();
         PageResponseDTO<OrderResponseDTO> response = new PageResponseDTO<>();
         response.setContent(orderDTOs);
@@ -51,6 +61,9 @@ public class OrderServiceImpl implements OrderService{
         return response;
     }
     private void validateUserExists(int userId){
-        userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("user not found with id:"+userId));
+        userRepository.findById(userId).orElseThrow(()-> {
+            log.warn("user not found with id={}", userId);
+            return new UserNotFoundException("user not found with id:" + userId);
+        });
     }
 }
