@@ -16,7 +16,6 @@ import java.util.List;
 @RestControllerAdvice(basePackages = "com.backend.demo.controller")
 public class GlobalExceptionHandler {
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<APIResponse<List<String>>> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex) {

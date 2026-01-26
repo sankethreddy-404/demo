@@ -18,7 +18,6 @@ import java.util.List;
 
 
 @Service
-
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     public UserServiceImpl(UserRepository userRepository){
@@ -79,7 +78,6 @@ public class UserServiceImpl implements UserService{
         UserMapper.updateEntity(existingUser,dto);
         User updateUser=userRepository.save(existingUser);
         return UserMapper.toResponseDTO(updateUser);
-
     }
     @Override
     public void  deleteUser(int id){

@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService{
         log.info("Order created successfully for userId={},orderId={}",userId,savedOrder.getId());
         return orderMapper.toResponseDTO(savedOrder);
     }
+
     @Override
     public PageResponseDTO<OrderResponseDTO> getOrdersByUserId(int userId, int page, int size, String sortBy, String sortDir,String keyword,Integer minPrice,Integer maxPrice){
         log.debug("Fetching orders for userId={},page={},size={}",userId,page,size);

@@ -41,6 +41,7 @@ public class OrderController {
                                                                                     @RequestParam(required = false) Integer minPrice,
                                                                                     @RequestParam(required = false) Integer maxPrice
                                                                                     ){
+
         log.info("GET /orders/users/{} called with page={},size={}, sortBy={}, sortDir={}",userId,page,size,sortBy,sortDir);
         PageResponseDTO<OrderResponseDTO> pageResponse=orderService.getOrdersByUserId(userId,page,size,sortBy,sortDir,keyword,minPrice,maxPrice);
         APIResponse<PageResponseDTO<OrderResponseDTO>> apiResponse= new APIResponse<>(LocalDateTime.now(),200,"Orders fetched successfully",pageResponse);
