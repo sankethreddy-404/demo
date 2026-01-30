@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,12 +21,15 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository){
+    private final PasswordEncoder passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder){
         this.userRepository=userRepository;
+        this.passwordEncoder=passwordEncoder;
     }
     @Override
     public UserResponseDTO createUser(UserRequestDTO dto){
-        User user= UserMapper.toEntity(dto);
+        User user= UserMapper.toEntity(dto,passwordEncoder);
+
         User savedUser=userRepository.save(user);
         return UserMapper.toResponseDTO(savedUser);
     }
@@ -33,7 +37,7 @@ public class UserServiceImpl implements UserService{
     public List<UserResponseDTO> createUsersBulk(List<UserRequestDTO> users){
         List<User> entities=new ArrayList<>();
         for(UserRequestDTO dto:users){
-            entities.add(UserMapper.toEntity(dto));
+            entities.add(UserMapper.toEntity(dto,passwordEncoder));
         }
         List<User> savedUsers=userRepository.saveAll(entities);
         List<UserResponseDTO> response=new ArrayList<>();

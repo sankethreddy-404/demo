@@ -12,8 +12,32 @@ public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
+    @Column(nullable=false)
     private String name;
+    @Column(nullable=false,unique=true)
     private String email;
+
+    @Column(nullable=false)
+    private String password;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Column(nullable = false)
+    private String role;
 
     public List<Order> getOrders() {
         return orders;
@@ -22,6 +46,7 @@ public class User {
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+
 
     @OneToMany(mappedBy="user",cascade=CascadeType.ALL,orphanRemoval = true)
     @JsonManagedReference
@@ -37,8 +62,6 @@ public class User {
     public void setId(int id) {
         this.id = id;
     }
-
-
 
     public String getName() {
         return name;

@@ -4,6 +4,16 @@ public class UserResponseDTO {
     private int id;
     private String name;
     private String email;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    private String role;
     public int getId() {
         return id;
     }

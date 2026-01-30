@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -30,7 +31,10 @@ public class OrderController {
         APIResponse<OrderResponseDTO> apiResponse=new APIResponse<>(LocalDateTime.now(),201,"Order created successfully",response);
         return  new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
+
+
     @Operation(summary="Get orders by user",description="Fetch orders of a user search,price filtering ,pagination and sorting")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/users/{userId}")
     public ResponseEntity<APIResponse<PageResponseDTO<OrderResponseDTO>>> getAllOrders(@PathVariable int userId,
                                                                                     @RequestParam (defaultValue ="0") int page,

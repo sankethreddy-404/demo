@@ -2,33 +2,37 @@ package com.backend.demo.controller;
 
 import com.backend.demo.dto.AuthRequest;
 import com.backend.demo.security.JwtUtil;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+
 public class AuthController {
 
+    private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public AuthController(JwtUtil jwtUtil) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequest request) {
+    public String login(@RequestBody AuthRequest request) {
 
-
-        if ("admin".equals(request.getUsername()) &&
-                "password".equals(request.getPassword())) {
-
-            String token = jwtUtil.generateToken(request.getUsername());
-            return ResponseEntity.ok(token);
-        }
-
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body("Invalid credentials");
+        Authentication authentication =
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                request.getEmail(),
+                                request.getPassword()
+                        )
+                );
+        UserDetails userDetails=(UserDetails) authentication.getPrincipal();
+        return jwtUtil.generateToken(userDetails);
     }
 }
